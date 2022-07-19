@@ -1,62 +1,59 @@
-import React, { Component } from 'react';
 import { FormLable } from './ContactForm.stylad';
 import { FormButton } from './ContactForm.stylad';
 
-class ContactForm extends Component {
-	state = {
-		name: '',
-		number: '',
-	};
+import { useState } from 'react';
 
-	handleChange = e => {
-		const { name, value } = e.currentTarget;
-		this.setState({ [name]: value });
-	};
+function ContactForm({ onSubmit }) {
+	const [name, setName] = useState('');
+	const [number, setNumber] = useState('');
 
-	addContact = e => {
+	const addContact = e => {
 		e.preventDefault();
-		this.props.onSubmit(this.state);
-		this.reset();
+		onSubmit({ name, number });
+		reset();
 	};
-
-	reset = () => {
-		this.setState({
-			name: '',
-			number: '',
-		});
+	const handleChangeName = e => {
+		const { value } = e.currentTarget;
+		setName(value);
 	};
+	const handleChangeNumber = e => {
+		const { value } = e.currentTarget;
+		setNumber(value);
+	};
+	const reset = () => {
+		setName('');
+		setNumber('');
+	};
+	return (
+		<form onSubmit={addContact}>
+			<FormLable>
+				Name:
+				<input
+					value={name}
+					onChange={handleChangeName}
+					type="text"
+					name="name"
+					pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+					title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
+					required
+				/>
+			</FormLable>
 
-	render() {
-		return (
-			<form onSubmit={this.addContact}>
-				<FormLable>
-					Name:
-					<input
-						value={this.state.name}
-						onChange={this.handleChange}
-						type="text"
-						name="name"
-						pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-						title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
-						required
-					/>
-				</FormLable>
-
-				<FormLable>
-					Tel:
-					<input
-						value={this.state.number}
-						onChange={this.handleChange}
-						type="tel"
-						name="number"
-						pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-						title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
-						required
-					/>
-				</FormLable>
-				<FormButton type="submit">Add contact</FormButton>
-			</form>
-		);
-	}
+			<FormLable>
+				Tel:
+				<input
+					value={number}
+					onChange={handleChangeNumber}
+					type="tel"
+					name="number"
+					pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+					title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+					required
+				/>
+			</FormLable>
+			<FormButton type="submit">Add contact</FormButton>
+		</form>
+	);
 }
+
 export default ContactForm;
